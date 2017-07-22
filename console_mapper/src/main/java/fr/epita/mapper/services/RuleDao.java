@@ -77,6 +77,13 @@ public class RuleDao {
 			DrawingString ds = new DrawingString(src,dest,port,protocol);
 			rules.add(ds);
 		}
+		if(rules.isEmpty()){
+			if("INPUT".equals(rule.getDirection())){
+				rules.add(new DrawingString("INTERNET","NETWORK",port,protocol+"(Assuming)"));
+			}else{
+				rules.add(new DrawingString("NETWORK","INTERNET",port,protocol+"(Assuming)"));
+			}
+		}
 		releaseResources();
 		statement.close();
 		return rules;

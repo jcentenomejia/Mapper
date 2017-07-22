@@ -28,7 +28,8 @@ public class RulesFile {
 		this.password = password;
 	}
 	
-	public void getFile(){
+	public boolean getFile(){
+		boolean result = false;
 		String hostname = this.host;
 		String user = this.username;
 		String pass = this.password;
@@ -37,23 +38,25 @@ public class RulesFile {
 		JSch jsch = new JSch();
 		Session session = null;
 		System.out.println("Trying to connect.....");
-			try {
-				session = jsch.getSession(user, hostname, 22);
-				session.setConfig("StrictHostKeyChecking", "no");
-				session.setPassword(pass);
-				session.connect(); 
-				Channel channel = session.openChannel("sftp");
-				channel.connect();
-				ChannelSftp sftpChannel = (ChannelSftp) channel; 
-				sftpChannel.get(copyFrom, copyTo);
-				sftpChannel.exit();
-				session.disconnect();
-			} catch (JSchException e) {
-				e.printStackTrace();
-			} catch (SftpException e) {
-				e.printStackTrace();
-			}
-			System.out.println("Done !!");
+		try {
+			session = jsch.getSession(user, hostname, 22);
+			session.setConfig("StrictHostKeyChecking", "no");
+			session.setPassword(pass);
+			session.connect(); 
+			Channel channel = session.openChannel("sftp");
+			channel.connect();
+			ChannelSftp sftpChannel = (ChannelSftp) channel; 
+			sftpChannel.get(copyFrom, copyTo);
+			sftpChannel.exit();
+			session.disconnect();
+			System.out.println("Done copying!!");
+			result = true;
+		} catch (JSchException e) {
+			e.printStackTrace();
+		} catch (SftpException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 	
 	public List<Rule> getRules(){
