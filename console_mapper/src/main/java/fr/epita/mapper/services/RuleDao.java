@@ -62,6 +62,7 @@ public class RuleDao {
 
 		int port = rule.getPort();
 		String protocol = rule.getProtocol();
+		boolean accept = rule.getAccept();
 		
 		PreparedStatement statement = connection.prepareStatement("select * from port_info where port = ? and direction = ?");
 		
@@ -74,14 +75,14 @@ public class RuleDao {
 			String src = rs.getString("src_layer");
 			String dest = rs.getString("dest_layer");
 			
-			DrawingString ds = new DrawingString(src,dest,port,protocol);
+			DrawingString ds = new DrawingString(src,dest,port,protocol,accept);
 			rules.add(ds);
 		}
 		if(rules.isEmpty()){
 			if("INPUT".equals(rule.getDirection())){
-				rules.add(new DrawingString("INTERNET","NETWORK",port,protocol+"(Assuming)"));
+				rules.add(new DrawingString("INTERNET","INTERNAL_NETWORK",port,protocol+"(Assuming)",accept));
 			}else{
-				rules.add(new DrawingString("NETWORK","INTERNET",port,protocol+"(Assuming)"));
+				rules.add(new DrawingString("INTERNAL_NETWORK","INTERNET",port,protocol+"(Assuming)",accept));
 			}
 		}
 		releaseResources();

@@ -1,7 +1,5 @@
 package fr.epita.mapper.launcher;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -10,11 +8,9 @@ import java.util.Scanner;
 
 import fr.epita.mapper.models.DrawingString;
 import fr.epita.mapper.models.Rule;
+import fr.epita.mapper.services.DrawMap;
 import fr.epita.mapper.services.RuleDao;
 import fr.epita.mapper.services.RulesFile;
-import net.sourceforge.plantuml.FileFormat;
-import net.sourceforge.plantuml.FileFormatOption;
-import net.sourceforge.plantuml.SourceStringReader;
 
 public class ConsoleLauncher {
 
@@ -57,31 +53,12 @@ public class ConsoleLauncher {
 				dao.insertRule(rule);
 				
 			}
-			draw(drawing);
+			
+			DrawMap mapper = new DrawMap(drawing);
+			mapper.generateMap();
 			System.out.println("Map ready!");
 		}
 		scanner.close();
 	}
 	
-	public void draw(List<DrawingString> list) throws IOException{
-		String drawingString = "@startuml \n"
-				+ "participant Internet as INTERNET \n"
-				+ "participant \"Public DMZ\" as PUBLIC_DMZ \n"
-				+ "participant \"Extranet DMZ\" as EXTRANET_DMZ \n"
-				+ "participant \"DB Network\" as DB_NETWORK \n"
-				+ "participant \"Internal Network\" as INTERNAL_NETWORK \n";
-				
-		for(DrawingString drawing:list){ 
-			
-			drawingString += drawing.getSrc() + " -> " + drawing.getDest() + " : " + drawing.getPort() + " " + drawing.getProtocol() + " \n";
-			
-		}
-		
-		drawingString += "@enduml ";
-		
-		SourceStringReader reader = new SourceStringReader(drawingString);
-		
-		FileOutputStream output = new FileOutputStream(new File("test.svg"));
-		reader.generateImage(output, new FileFormatOption(FileFormat.SVG, false));
-	}
 }
