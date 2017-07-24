@@ -29,8 +29,8 @@ public class DrawMap {
 		Arrays.fill(arrows, " -> ");
 		
 		String drawingString = "@startuml \n"
-				+ "skinparam monochrome true \n"
 				+ "participant Internet as INTERNET \n"
+				+ "participant VPN \n"
 				+ "participant \"Public DMZ\" as PUBLIC_DMZ \n"
 				+ "participant \"Extranet DMZ\" as EXTRANET_DMZ \n"
 				+ "participant \"DB Network\" as DB_NETWORK \n"
@@ -47,6 +47,7 @@ public class DrawMap {
 						toPrint[j] = false;
 						arrows[i] = " <-> ";
 					}
+					
 				}
 			}
 		}
@@ -55,9 +56,28 @@ public class DrawMap {
 		for(int i = 0; i < size; i++){
 			
 			if(toPrint[i]){
-				drawingString += drawingStrings.get(i).getSrc() + arrows[i] + drawingStrings.get(i).getDest() + " : " + drawingStrings.get(i).getPort() + " " + drawingStrings.get(i).getProtocol() + " \n";
-				if(!drawingStrings.get(i).getAccept()){
-					drawingString += "destroy " + drawingStrings.get(i).getDest() + " \n";
+				String src = drawingStrings.get(i).getSrc();
+				String dest = drawingStrings.get(i).getDest();
+				int port = drawingStrings.get(i).getPort();
+				String protocol = drawingStrings.get(i).getProtocol();
+				boolean accept = drawingStrings.get(i).getAccept();
+				String userSrc = drawingStrings.get(i).getUserSrc();
+				String userDest = drawingStrings.get(i).getUserDest();
+				
+				if( userSrc != null){
+					userSrc = " from " + userSrc + "\\n";
+				}else{
+					userSrc = "";
+				}
+				if( userDest != null){
+					userDest = " to " + userDest + "\\n";
+				}else{
+					userDest = "";
+				}
+				
+				drawingString += src + arrows[i] + dest + " : " + port + " " + protocol + userSrc + userDest + " \n";
+				if(!accept){
+					drawingString += "destroy " + dest + " \n";
 				}
 			}
 		}

@@ -74,15 +74,17 @@ public class RuleDao {
 		while (rs.next()) {
 			String src = rs.getString("src_layer");
 			String dest = rs.getString("dest_layer");
+			String userSrc = rs.getString("source");
+			String userDest = rs.getString("destination");
 			
-			DrawingString ds = new DrawingString(src,dest,port,protocol,accept);
+			DrawingString ds = new DrawingString(src,dest,port,protocol,accept,userSrc,userDest);
 			rules.add(ds);
 		}
 		if(rules.isEmpty()){
 			if("INPUT".equals(rule.getDirection())){
-				rules.add(new DrawingString("INTERNET","INTERNAL_NETWORK",port,protocol+"(Assuming)",accept));
+				rules.add(new DrawingString("INTERNET","INTERNAL_NETWORK",port,protocol+"(Assuming)",accept,"",""));
 			}else{
-				rules.add(new DrawingString("INTERNAL_NETWORK","INTERNET",port,protocol+"(Assuming)",accept));
+				rules.add(new DrawingString("INTERNAL_NETWORK","INTERNET",port,protocol+"(Assuming)",accept,"",""));
 			}
 		}
 		releaseResources();

@@ -7,14 +7,19 @@ public class DrawingString {
 	private int port;
 	private String protocol;
 	private boolean accept;
+	private String userSrc;
+	private String userDest;
 	
-	public DrawingString(String src, String dest, int port, String protocol, boolean accept) {
+	public DrawingString(String src, String dest, int port, String protocol, boolean accept, String userSrc, String userDest) {
 		
 		this.src = src;
 		this.dest = dest;
 		this.port = port;
 		this.protocol = protocol;
 		this.accept = accept;
+		this.userSrc = userSrc;
+		this.userDest = userDest;
+		
 	}
 
 	public String getSrc() {
@@ -55,6 +60,22 @@ public class DrawingString {
 	
 	public boolean getAccept(){
 		return accept;
+	}
+	
+	public String getUserSrc() {
+		return userSrc;
+	}
+
+	public void setUserSrc(String userSrc) {
+		this.userSrc = userSrc;
+	}
+	
+	public String getUserDest() {
+		return userDest;
+	}
+
+	public void setUserDest(String userDest) {
+		this.userDest = userDest;
 	}
 	
 	public String toString(){
